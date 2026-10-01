@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barracuda Bi-Propellent Engine Rework - Rogelio Carbajal</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: #333; }
+
+        header {
+            background: linear-gradient(135deg, #001f3f 0%, #003d7a 100%);
+            color: white;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo img { height: 50px; transition: transform 0.3s; }
+        .logo img:hover { transform: scale(1.05); }
+
+        nav ul { list-style: none; display: flex; gap: 2rem; }
+        nav a { color: white; text-decoration: none; transition: 0.3s; }
+        nav a:hover { opacity: 0.8; }
+
+        .dropdown { position: relative; }
+        .dropdown > a::after {
+            content: '';
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-right: 2px solid white;
+            border-bottom: 2px solid white;
+            transform: rotate(45deg) translateY(-3px);
+            margin-left: 6px;
+            transition: 0.3s;
+        }
+        .dropdown:hover > a::after { transform: rotate(-135deg) translateY(2px); }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: linear-gradient(135deg, #003d7a 0%, #001f3f 100%);
+            list-style: none;
+            padding: 0.8rem 0;
+            border-radius: 12px;
+            min-width: 280px;
+            margin-top: 0;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            pointer-events: none;
+        }
+
+        .dropdown:hover .dropdown-menu {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        .dropdown-menu a {
+            display: block;
+            padding: 0.9rem 1.5rem;
+            color: white;
+            border-left: 4px solid transparent;
+            transition: 0.3s;
+        }
+        .dropdown-menu a:hover {
+            background: rgba(255,255,255,0.1);
+            padding-left: 2rem;
+            border-left-color: #667eea;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 6rem 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            min-height: 70vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('barracuda_back.jpeg') center/cover;
+            opacity: 0.15;
+            z-index: 0;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 31, 63, 0.55);
+            z-index: 1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .hero h1 { 
+            font-size: 2.8rem; 
+            margin-bottom: 1rem; 
+            animation: slideDown 0.8s;
+        }
+
+        .hero .project-meta { 
+            font-size: 1.1rem; 
+            opacity: 0.9; 
+            animation: slideUp 0.8s 0.2s both; 
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .container { 
+            max-width: 1000px; 
+            margin: 0 auto; 
+            padding: 0 2rem; 
+        }
+
+        main { 
+            padding: 4rem 0; 
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 2rem;
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .back-link:hover { 
+            color: #764ba2; 
+        }
+
+        .section {
+            margin-bottom: 2.5rem;
+            animation: fadeIn 0.8s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section h2 {
+            color: #001f3f;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-bottom: 1rem;
+        }
+
+        .section h2::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 2px;
+        }
+
+        .section h3 {
+            color: #003d7a;
+            font-size: 1.2rem;
+            margin-top: 1.5rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .section p {
+            line-height: 1.8;
+            color: #555;
+            margin-bottom: 1rem;
+        }
+
+        .section ul {
+            list-style: none;
+            margin-bottom: 1.5rem;
+            margin-left: 1rem;
+        }
+
+        .section li {
+            padding: 0.4rem 0 0.4rem 1.5rem;
+            position: relative;
+            color: #555;
+            line-height: 1.6;
+        }
+
+        .section li:before {
+            content: "▸";
+            color: #667eea;
+            position: absolute;
+            left: 0;
+        }
+
+        .process-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin: 2rem 0;
+            align-items: start;
+        }
+
+        .process-text h3 {
+            margin-top: 0;
+        }
+
+        .media-placeholder {
+            background: linear-gradient(135deg, #f0f4f8 0%, #e8f1ff 100%);
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            overflow: hidden;
+            min-height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #667eea;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.2);
+        }
+
+        .media-placeholder img,
+        .media-placeholder video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            border-left: 4px solid #28a745;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+        }
+
+        .highlight-box h4 {
+            color: #155724;
+            margin-bottom: 1rem;
+            margin-top: 0;
+        }
+
+        .highlight-box ul {
+            margin-bottom: 0;
+        }
+
+        .video-section {
+            margin: 2rem auto;
+            background: linear-gradient(135deg, #f0f4f8 0%, #e8f1ff 100%);
+            padding: 2rem;
+            border-radius: 8px;
+            text-align: center;
+            max-width: 700px;
+        }
+
+        .video-section h3 {
+            color: #001f3f;
+            margin-top: 0;
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin: 1rem auto 0;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,31,63,0.15);
+            background: #000;
+        }
+
+        .video-container video {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        footer {
+            background: #001f3f;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
+        }
+
+        @media (max-width: 768px) {
+            nav ul { gap: 1rem; font-size: 0.9rem; }
+            .hero { min-height: 50vh; }
+            .hero h1 { font-size: 2rem; }
+            .section h2 { font-size: 1.6rem; }
+            .process-section { grid-template-columns: 1fr; }
+            .video-section { max-width: 100%; }
+            .video-container { max-width: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <a href="Portfolio_1.html" style="text-decoration: none; color: white; display: flex; align-items: center;">
+                    <img src="Boston-University-Emblem.png" alt="Boston University">
+                </a>
+            </div>
+            <ul>
+                <li><a href="Portfolio_1.html">Home</a></li>
+                <li><a href="Portfolio_1.html#about">About</a></li>
+                <li><a href="Portfolio_1.html#expertise">Expertise</a></li>
+                <li><a href="Portfolio_1.html#skills">Skills</a></li>
+                
+                <li class="dropdown">
+                    <a href="projects.html">Projects</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="barracuda_engine.html">Barracuda Engine Rework</a></li>
+                        <li><a href="pin_installation.html">Pin Installation Improvement</a></li>
+                        <li><a href="poker_chips.html">Poker Chip Set</a></li>
+                        <li><a href="avionics_bay.html">Avionics Bay Manufacturing</a></li>
+                        <li><a href="anteater.html">Project Anteater</a></li>
+                        <li><a href="rocket_nozzle.html">Rocket Nozzle & Flight Computer</a></li>
+                    </ul>
+                </li>
+                
+                <li class="dropdown">
+                    <a href="experiences.html">Experience</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="experiences.html#pivot">Pivot Manufacturing</a></li>
+                        <li><a href="experiences.html#rocket-prop">Rocket Propulsion Group</a></li>
+                        <li><a href="experiences.html#shpe">SHPE Leadership</a></li>
+                    </ul>
+                </li>
+                
+                <li><a href="Portfolio_1.html#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Barracuda Bi-Propellent Engine Rework</h1>
+            <p class="project-meta">Precision CNC Machining • Engine Assembly • Quality Testing</p>
+        </div>
+    </section>
+
+    <main>
+        <div class="container">
+            <a href="projects.html" class="back-link">← Back to Projects</a>
+
+            <section class="section">
+                <h2>Project Overview</h2>
+                <p>Reworked and rebuilt Barracuda bi-propellent engine injector components for the Rocket Propulsion Group. The primary goal was to improve the seal integrity between the three injector components during water flow testing and hot firing operations, ensuring reliable performance under demanding conditions.</p>
+            </section>
+
+            <section class="section">
+                <h2>The Challenge</h2>
+                <p>The original engine assembly experienced seal leakage between the three injector components during testing. Key objectives included:</p>
+                <ul>
+                    <li>Improve seal integrity between injector components</li>
+                    <li>Withstand water flow testing without leakage</li>
+                    <li>Maintain performance during hot firing operations</li>
+                    <li>Achieve consistent, repeatable results across all units</li>
+                </ul>
+            </section>
+
+            <section class="section">
+                <h2>Manufacturing Process</h2>
+
+                <h3>Precision CNC Machining</h3>
+                <div class="process-section">
+                    <div class="process-text">
+                        <p>Machined all three injector components to achieve perfect mating surfaces:</p>
+                        <ul>
+                            <li>Precision bore machining for component alignment</li>
+                            <li>Tight surface finish to improve seal contact</li>
+                            <li>Accurate thread profiles for reliable fastening</li>
+                            <li>Verified concentricity and perpendicularity</li>
+                        </ul>
+                    </div>
+                    <div class="media-placeholder">
+                        <img src="barracuda_machine.jpeg" alt="CNC Machining of Barracuda Engine Components">
+                    </div>
+                </div>
+
+                <h3>Component Assembly</h3>
+                <div class="process-section">
+                    <div class="process-text">
+                        <p>Carefully assembled the three-component injector stack:</p>
+                        <ul>
+                            <li>Cleaned all surfaces before assembly</li>
+                            <li>Applied appropriate sealing compounds</li>
+                            <li>Torqued fasteners to specification</li>
+                            <li>Verified alignment before final assembly</li>
+                        </ul>
+                    </div>
+                    <div class="media-placeholder">
+                        <img src="barracuda_asm.jpeg" alt="Barracuda Engine Assembly Process">
+                    </div>
+                </div>
+            </section>
+
+            <section class="section">
+                <h2>Quality Control & Thread Integrity</h2>
+
+                <h3>Helicoil Installation for Enhanced Thread Strength</h3>
+                <p>To improve thread integrity and increase torque rating, I installed helicoils in critical fastener holes:</p>
+                <ul>
+                    <li>Helicoils provide reinforced threads for higher load capacity</li>
+                    <li>Allows higher torque values without stripping</li>
+                    <li>Increases overall structural integrity of the assembly</li>
+                    <li>Enables reliable repeated assembly and disassembly</li>
+                </ul>
+
+                <h3>Water Flow Testing Preparation</h3>
+                <p>I played a key role in preparing the engine for water flow testing using the horizontal testing stand:</p>
+                <ul>
+                    <li>Assembled engine components to prepare for flow testing</li>
+                    <li>Monitored for any leakage during pressurization</li>
+                    <li>Recorded data and verified seal integrity</li>
+                </ul>
+            </section>
+
+            <section class="section">
+                <div class="video-section">
+                    <h2>Water Flow Test</h2>
+                    <h3>Water Flow Testing Video</h3>
+                    <div class="video-container">
+                        <video autoplay muted loop playsinline>
+                            <source src="water_flow_full.mp4" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section">
+                <h2>Results & Achievements</h2>
+                <div class="highlight-box">
+                    <h4>Testing Outcomes</h4>
+                    <ul>
+                        <li>Zero leakage detected during water flow testing at full pressure</li>
+                        <li>Consistent seal integrity across all test cycles</li>
+                        <li>Improved thread torque ratings through helicoil installation</li>
+                        <li>Established reliable assembly and testing procedures</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section class="section">
+                <h2>Key Skills Demonstrated</h2>
+                <ul>
+                    <li>Precision CNC machining and surface finish optimization</li>
+                    <li>Component assembly and sealing techniques</li>
+                    <li>Helicoil installation for thread reinforcement</li>
+                    <li>Test stand setup and operation</li>
+                    <li>Data collection and analysis during testing</li>
+                    <li>Problem-solving for leak mitigation</li>
+                </ul>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Rogelio Carbajal. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Set video playback rate
+        window.addEventListener('DOMContentLoaded', function() {
+            const videos = document.querySelectorAll('video');
+            videos.forEach(video => {
+                video.playbackRate = 1.5;
+                video.play().catch(err => console.log('Video autoplay prevented:', err));
+            });
+        });
+    </script>
+</body>
+</html>
