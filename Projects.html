@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rogelio Carbajal - Projects</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: #333; }
+
+        header {
+            background: linear-gradient(135deg, #001f3f 0%, #003d7a 100%);
+            color: white;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo img { height: 50px; transition: transform 0.3s; }
+        .logo img:hover { transform: scale(1.05); }
+
+        nav ul { list-style: none; display: flex; gap: 2rem; }
+        nav a { color: white; text-decoration: none; transition: 0.3s; }
+        nav a:hover { opacity: 0.8; }
+
+        .dropdown { position: relative; }
+        .dropdown > a::after {
+            content: '';
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-right: 2px solid white;
+            border-bottom: 2px solid white;
+            transform: rotate(45deg) translateY(-3px);
+            margin-left: 6px;
+            transition: 0.3s;
+        }
+        .dropdown:hover > a::after { transform: rotate(-135deg) translateY(2px); }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: linear-gradient(135deg, #003d7a 0%, #001f3f 100%);
+            list-style: none;
+            padding: 0.8rem 0;
+            border-radius: 12px;
+            min-width: 280px;
+            margin-top: 0;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            pointer-events: none;
+        }
+
+        .dropdown:hover .dropdown-menu {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        .dropdown-menu a {
+            display: block;
+            padding: 0.9rem 1.5rem;
+            color: white;
+            border-left: 4px solid transparent;
+            transition: 0.3s;
+        }
+        .dropdown-menu a:hover {
+            background: rgba(255,255,255,0.1);
+            padding-left: 2rem;
+            border-left-color: #667eea;
+        }
+
+        .page-title {
+            color: white;
+            padding: 6rem 2rem;
+            text-align: center;
+            position: relative;
+            min-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            background: url('boston_university_back.jpg') center/cover;
+        }
+
+        .page-title::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 31, 63, 0.7);
+            z-index: 1;
+        }
+
+        .page-title-content { position: relative; z-index: 2; }
+        .page-title h1 { font-size: 2.8rem; margin-bottom: 0.5rem; animation: slideDown 0.8s; }
+        .page-title p { font-size: 1.1rem; animation: slideUp 0.8s 0.2s both; }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
+        main { padding: 5rem 0; }
+
+        h2 {
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: #001f3f;
+            text-align: center;
+            position: relative;
+        }
+
+        h2::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            margin: 1rem auto 0;
+            border-radius: 2px;
+        }
+
+        .scroll-animate {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.6s, transform 0.6s;
+        }
+
+        .projects-stack { display: flex; flex-direction: column; gap: 3rem; }
+        .project-section { scroll-margin-top: 250px; }
+
+        .project-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,31,63,0.08);
+            border-top: 4px solid #667eea;
+            transition: all 0.3s;
+        }
+
+        .project-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 25px rgba(0,31,63,0.15);
+        }
+
+        .project-card-inner {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            padding: 2rem;
+            align-items: center;
+            opacity: 0;
+            transform: translateY(40px);
+        }
+
+        .project-image {
+            width: 100%;
+            height: 300px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.2);
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            background: #f0f4f8;
+            position: relative;
+        }
+
+        .project-image:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .project-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+        }
+
+        .project-image video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+        }
+
+        /* Barracuda video positioning */
+        #barracuda .project-image video {
+            object-position: center bottom;
+        }
+
+        .project-content h3 { color: #001f3f; margin-bottom: 0.5rem; font-size: 1.5rem; }
+        .project-tech { color: #667eea; font-weight: 600; margin-bottom: 1rem; }
+        .project-description { color: #555; margin-bottom: 1.5rem; line-height: 1.8; }
+
+        .project-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .tag {
+            background: #f0f4f8;
+            color: #667eea;
+            padding: 0.35rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            border: 1px solid #667eea;
+            transition: 0.3s;
+        }
+
+        .tag:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .learn-more-btn {
+            display: inline-block;
+            padding: 0.6rem 1.5rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.3s;
+            text-decoration: none;
+        }
+
+        .learn-more-btn:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .expand-icon {
+            display: inline-block;
+            margin-left: 0.5rem;
+            transition: transform 0.3s;
+        }
+
+        footer {
+            background: #001f3f;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+
+        @media (max-width: 768px) {
+            nav ul { gap: 1rem; font-size: 0.9rem; }
+            .page-title { padding: 4rem 2rem; min-height: 60vh; }
+            .page-title h1 { font-size: 1.8rem; }
+            .page-title p { font-size: 0.95rem; }
+            h2 { font-size: 2rem; }
+            .project-card-inner { grid-template-columns: 1fr; gap: 1.5rem; padding: 1.5rem; }
+            .project-image { height: 250px; }
+            .project-section { scroll-margin-top: 180px; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <a href="index.html" style="text-decoration: none; color: white; display: flex; align-items: center;">
+                    <img src="Boston-University-Emblem.png" alt="Boston University">
+                </a>
+            </div>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="index.html#about">About</a></li>
+                <li><a href="index.html#expertise">Expertise</a></li>
+                <li><a href="index.html#skills">Skills</a></li>
+                
+                <li class="dropdown">
+                    <a href="projects.html">Projects</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="barracuda_engine.html">Barracuda Engine Rework</a></li>
+                        <li><a href="pin_installation.html">Pin Installation Improvement</a></li>
+                        <li><a href="poker_chips.html">Poker Chip Set</a></li>
+                        <li><a href="avionics_bay.html">Avionics Bay Manufacturing</a></li>
+                        <li><a href="anteater.html">Project Anteater</a></li>
+                        <li><a href="rocket_nozzle.html">Rocket Nozzle & Flight Computer</a></li>
+                    </ul>
+                </li>
+                
+                <li class="dropdown">
+                    <a href="experiences.html">Experience</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="experiences.html#pivot">Pivot Manufacturing</a></li>
+                        <li><a href="experiences.html#rocket-prop">Rocket Propulsion Group</a></li>
+                        <li><a href="experiences.html#shpe">SHPE Leadership</a></li>
+                    </ul>
+                </li>
+                
+                <li><a href="index.html#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="page-title">
+        <div class="page-title-content">
+            <h1>My Projects</h1>
+            <p>Engineering Solutions & Manufacturing Excellence</p>
+        </div>
+    </section>
+
+    <main>
+        <div class="container">
+            <h2 class="scroll-animate">Featured Projects</h2>
+
+            <div class="projects-stack">
+                <!-- PROJECT 1: BARRACUDA ENGINE -->
+                <div class="project-section" id="barracuda">
+                    <div class="project-card">
+                        <div class="project-card-inner">
+                            <a href="barracuda_engine.html" class="project-image">
+                                <video autoplay muted loop playsinline>
+                                    <source src="barracuda_flow.mp4" type="video/mp4">
+                                </video>
+                            </a>
+                            <div class="project-content">
+                                <h3>Barracuda Bi-Propellent Engine Rework</h3>
+                                <p class="project-tech">CNC Machining • Engine Assembly • Quality Control</p>
+                                <p class="project-description">Reworked and rebuilt Barracuda bi-propellent engine components to aerospace specifications. Performed precision machining on engine housings and fuel delivery systems using CNC operations.</p>
+                                <div class="project-tags">
+                                    <span class="tag">CNC Machining</span>
+                                    <span class="tag">Aerospace</span>
+                                    <span class="tag">Engine Work</span>
+                                    <span class="tag">Quality Assurance</span>
+                                </div>
+                                <a href="barracuda_engine.html" class="learn-more-btn">Learn More <span class="expand-icon">→</span></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PROJECT 2: PIN INSTALLATION -->
+                <div class="project-section" id="pin-installation">
+                    <div class="project-card">
+                        <div class="project-card-inner">
+                            <a href="pin_installation.html" class="project-image">
+                                <video autoplay muted loop playsinline>
+                                    <source src="Assembly_improvment.mp4" type="video/mp4">
+                                </video>
+                            </a>
+                            <div class="project-content">
+                                <h3>Pin Installation Process Improvement</h3>
+                                <p class="project-tech">Process Optimization • Fixture Design • Manufacturing</p>
+                                <p class="project-description">Redesigned pin installation process and custom fixturing to reduce assembly time from 9-10 minutes per assembly to 2-3 minutes. Developed ergonomic solutions that improved both speed and accuracy.</p>
+                                <div class="project-tags">
+                                    <span class="tag">Process Improvement</span>
+                                    <span class="tag">Fixture Design</span>
+                                    <span class="tag">Assembly</span>
+                                    <span class="tag">Efficiency</span>
+                                </div>
+                                <a href="pin_installation.html" class="learn-more-btn">Learn More <span class="expand-icon">→</span></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PROJECT 3: POKER CHIPS -->
+                <div class="project-section" id="poker-chips">
+                    <div class="project-card">
+                        <div class="project-card-inner">
+                            <a href="poker_chips.html" class="project-image">
+                                <video autoplay muted loop playsinline>
+                                    <source src="poker_chip_vid.mov" type="video/mp4">
+                                </video>
+                            </a>
+                            <div class="project-content">
+                                <h3>Poker Chip Set Manufacturing Project</h3>
+                                <p class="project-tech">CAD Design • CNC Operations • Finishing</p>
+                                <p class="project-description">Designed and manufactured complete poker chip set using SOLIDWORKS and CNC machining. Project demonstrated proficiency in design-to-manufacturing workflow, from concept through final finishing.</p>
+                                <div class="project-tags">
+                                    <span class="tag">CAD Design</span>
+                                    <span class="tag">CNC Machining</span>
+                                    <span class="tag">Manufacturing</span>
+                                    <span class="tag">Finishing</span>
+                                </div>
+                                <a href="poker_chips.html" class="learn-more-btn">Learn More <span class="expand-icon">→</span></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PROJECT 4: AVIONICS BAY -->
+                <div class="project-section" id="avionics-bay">
+                    <div class="project-card">
+                        <div class="project-card-inner">
+                            <a href="avionics_bay.html" class="project-image">
+                                <img src="av_bay.JPG" alt="Avionics Bay Manufacturing">
+                            </a>
+                            <div class="project-content">
+                                <h3>Avionics Bay Manufacturing Project</h3>
+                                <p class="project-tech">Fusion 360 CAM • CNC Mill • Fixture Design</p>
+                                <p class="project-description">Designed precision clamping system for rocket avionics bay. Developed multi-part CAM strategy from single stock and created custom fixtures for complex radial hole drilling operations.</p>
+                                <div class="project-tags">
+                                    <span class="tag">CAM Design</span>
+                                    <span class="tag">CNC Machining</span>
+                                    <span class="tag">Fixture Design</span>
+                                    <span class="tag">Aerospace</span>
+                                </div>
+                                <a href="avionics_bay.html" class="learn-more-btn">Learn More <span class="expand-icon">→</span></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PROJECT 5: ANTEATER ROBOT -->
+                <div class="project-section" id="anteater">
+                    <div class="project-card">
+                        <div class="project-card-inner">
+                            <a href="anteater.html" class="project-image">
+                                <img src="anteater.jpeg" alt="Project Anteater Robot">
+                            </a>
+                            <div class="project-content">
+                                <h3>Project Anteater: Surface Cleaning Robot</h3>
+                                <p class="project-tech">Robotics • Mechanical Design • Manufacturing</p>
+                                <p class="project-description">Led mechanical design and manufacturing of an autonomous surface cleaning robot capable of navigating a 4ft x 4ft desk. Designed and manufactured the vacuum system using 3D printing, created the acrylic housing in SOLIDWORKS with DFM principles, and machined aluminum motor adapters.</p>
+                                <div class="project-tags">
+                                    <span class="tag">Robotics</span>
+                                    <span class="tag">Mechanical Design</span>
+                                    <span class="tag">3D Printing</span>
+                                    <span class="tag">CNC Machining</span>
+                                </div>
+                                <a href="anteater.html" class="learn-more-btn">Learn More <span class="expand-icon">→</span></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PROJECT 6: ROCKET NOZZLE -->
+                <div class="project-section" id="rocket-nozzle">
+                    <div class="project-card">
+                        <div class="project-card-inner">
+                            <a href="rocket_nozzle.html" class="project-image">
+                                <video autoplay muted loop playsinline>
+                                    <source src="hip_vid.mov" type="video/mp4">
+                                </video>
+                            </a>
+                            <div class="project-content">
+                                <h3>Rocket Nozzle & Flight Computer</h3>
+                                <p class="project-tech">SOLIDWORDS • FEA • C++ • Embedded Systems</p>
+                                <p class="project-description">Designed hybrid rocket nozzle using rocketry equations and validated with FEA analysis. Developed flight computer system to control engine actuation, ignition, and data logging for test fires.</p>
+                                <div class="project-tags">
+                                    <span class="tag">Rocket Propulsion</span>
+                                    <span class="tag">FEA Analysis</span>
+                                    <span class="tag">Embedded Systems</span>
+                                    <span class="tag">Data Logging</span>
+                                </div>
+                                <a href="rocket_nozzle.html" class="learn-more-btn">Learn More <span class="expand-icon">→</span></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Rogelio Carbajal. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Initialize all media and animations on page load
+        window.addEventListener('DOMContentLoaded', function() {
+            initializeMedia();
+            initializeAnimations();
+        });
+
+        // Media initialization function
+        function initializeMedia() {
+            // All project videos setup
+            document.querySelectorAll('.project-image video').forEach((video, index) => {
+                video.playbackRate = 1.5;
+                video.play().catch(err => console.log(`Project video ${index} autoplay prevented:`, err));
+            });
+        }
+
+        // Animation initialization
+        function initializeAnimations() {
+            const options = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, options);
+
+            // Observe scroll animations
+            document.querySelectorAll('.scroll-animate').forEach(el => {
+                observer.observe(el);
+            });
+
+            // Observe project cards
+            document.querySelectorAll('.project-card-inner').forEach(el => {
+                observer.observe(el);
+            });
+        }
+
+        // Fallback scroll animation for unsupported browsers
+        function scrollAnimateFallback() {
+            document.querySelectorAll('.scroll-animate, .project-card-inner').forEach(el => {
+                const top = el.getBoundingClientRect().top;
+                const height = window.innerHeight;
+                const isVisible = top < height && top > -el.offsetHeight;
+                
+                if (isVisible && el.style.opacity !== '1') {
+                    el.style.opacity = '1';
+                    el.style.transform = 'translateY(0)';
+                }
+            });
+        }
+
+        // Scroll event listener with fallback
+        window.addEventListener('scroll', scrollAnimateFallback, { passive: true });
+
+        // Trigger fallback animation on load
+        window.addEventListener('load', scrollAnimateFallback);
+    </script>
+</body>
+</html>
