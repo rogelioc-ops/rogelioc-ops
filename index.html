@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rogelio Carbajal - Engineering Portfolio</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        /* Header & Navigation */
+        header {
+            background: linear-gradient(135deg, #001f3f 0%, #003d7a 100%);
+            color: white;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo-img {
+            height: 80px;
+            width: auto;
+            transition: transform 0.3s ease;
+        }
+
+        .logo-img:hover {
+            opacity: 0.8;
+            transform: scale(1.05);
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 2rem;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        nav a:hover {
+            opacity: 0.8;
+        }
+
+        /* Dropdown Menu */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown > a::after {
+            content: '';
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-right: 2px solid white;
+            border-bottom: 2px solid white;
+            transform: rotate(45deg) translateY(-3px);
+            margin-left: 6px;
+            transition: transform 0.3s ease;
+        }
+
+        .dropdown:hover > a::after {
+            transform: rotate(-135deg) translateY(2px);
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: calc(100% + 0px);
+            left: 0;
+            background: linear-gradient(135deg, #003d7a 0%, #001f3f 100%);
+            list-style: none;
+            padding: 0.8rem 0;
+            border-radius: 12px;
+            min-width: 280px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+            margin-top: 0;
+            opacity: 0;
+            transform: translateY(-10px) scaleY(0.95);
+            transform-origin: top center;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            pointer-events: none;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .dropdown:hover .dropdown-menu {
+            display: block;
+            opacity: 1;
+            transform: translateY(0) scaleY(1);
+            pointer-events: auto;
+        }
+
+        .dropdown-menu li {
+            margin: 0;
+            padding: 0;
+        }
+
+        .dropdown-menu a {
+            display: block;
+            padding: 0.9rem 1.5rem;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+        }
+
+        .dropdown-menu a:hover {
+            background: rgba(255,255,255,0.1);
+            padding-left: 2rem;
+            border-left-color: #667eea;
+        }
+
+        /* Hero Section - FOCUS ON TOP */
+        .hero {
+            background: linear-gradient(rgba(0, 31, 63, 0.7), rgba(0, 61, 122, 0.7)), url('Portfolio_Backdrop.jpg') center top/cover;
+            background-attachment: fixed;
+            color: white;
+            padding: 10rem 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            min-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 50% 50%, rgba(102, 126, 234, 0.1) 0%, transparent 100%);
+            animation: pulse 4s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            animation: slideInDown 0.8s ease-out;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            opacity: 0.95;
+            animation: slideInUp 0.8s ease-out 0.2s both;
+            position: relative;
+            z-index: 2;
+        }
+
+        @keyframes slideInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 2rem;
+            background: white;
+            color: #001f3f;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            position: relative;
+            overflow: hidden;
+            animation: slideInUp 0.8s ease-out 0.4s both;
+            z-index: 2;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            background: #f0f4f8;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Section Styling */
+        section {
+            padding: 5rem 0;
+            border-bottom: 1px solid #eee;
+            position: relative;
+        }
+
+        /* Scroll Margin for Navigation - Accounts for sticky header */
+        #about,
+        #expertise,
+        #skills,
+        #contact {
+            scroll-margin-top: 130px;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            color: #001f3f;
+            text-align: center;
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+
+        h2::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            margin: 1rem auto 0;
+            border-radius: 2px;
+        }
+
+        /* Scroll Animation Classes */
+        .scroll-animate {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+
+        .scroll-animate.fade-left {
+            transform: translateX(-40px);
+            opacity: 0;
+        }
+
+        .scroll-animate.fade-right {
+            transform: translateX(40px);
+            opacity: 0;
+        }
+
+        /* About Section */
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .about-text {
+            opacity: 0;
+        }
+
+        .about-text:nth-child(1) {
+            transform: translateX(-40px);
+        }
+
+        .about-text:nth-child(2) {
+            transform: translateX(40px);
+        }
+
+        .about-text h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #001f3f;
+        }
+
+        .about-text p {
+            margin-bottom: 1rem;
+            line-height: 1.8;
+            color: #555;
+        }
+
+        /* Headshot Image */
+        .headshot-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+        }
+
+        .headshot-container.scroll-animate {
+            transform: scale(0.9);
+        }
+
+        .headshot {
+            width: 280px;
+            height: 280px;
+            border-radius: 20px;
+            object-fit: cover;
+            border: 8px solid #001f3f;
+            box-shadow: 0 8px 30px rgba(0,31,63,0.3);
+            transition: all 0.3s ease;
+        }
+
+        .headshot:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 50px rgba(0,31,63,0.4);
+            border-color: #667eea;
+        }
+
+        /* Expertise Section */
+        .expertise-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .expertise-card {
+            background: linear-gradient(135deg, #f0f4f8 0%, #e8f1ff 100%);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,31,63,0.08);
+            border-top: 4px solid #667eea;
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .expertise-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 25px rgba(0,31,63,0.15);
+            background: linear-gradient(135deg, #e8f1ff 0%, #d9e9ff 100%);
+        }
+
+        .expertise-card h3 {
+            color: #001f3f;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .expertise-card p {
+            color: #555;
+            line-height: 1.7;
+        }
+
+        /* Skills Section */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .skill-card {
+            background: linear-gradient(135deg, #f0f4f8 0%, #e8f1ff 100%);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,31,63,0.08);
+            border-left: 4px solid #001f3f;
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .skill-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 25px rgba(0,31,63,0.15);
+            background: linear-gradient(135deg, #e8f1ff 0%, #d9e9ff 100%);
+        }
+
+        .skill-card h3 {
+            color: #001f3f;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .skill-card ul {
+            list-style: none;
+        }
+
+        .skill-card li {
+            padding: 0.6rem 0;
+            color: #333;
+            transition: all 0.2s ease;
+        }
+
+        .skill-card li:hover {
+            color: #667eea;
+            transform: translateX(5px);
+        }
+
+        .skill-card li:before {
+            content: "◆ ";
+            color: #667eea;
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+
+        /* Contact Section */
+        #contact {
+            background: rgba(240, 244, 248, 0.95);
+        }
+
+        .contact-content {
+            text-align: center;
+        }
+
+        .contact-content p {
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            color: #333;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .contact-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .contact-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, #f0f4f8 0%, #e8f1ff 100%);
+            color: #001f3f;
+            text-decoration: none;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            border: 2px solid #001f3f;
+            font-weight: 500;
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .contact-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #001f3f 0%, #003d7a 100%);
+            z-index: -1;
+            transition: left 0.3s ease;
+        }
+
+        .contact-link:hover {
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,31,63,0.2);
+        }
+
+        .contact-link:hover::before {
+            left: 0;
+        }
+
+        /* Footer */
+        footer {
+            background: #001f3f;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            nav ul {
+                gap: 1rem;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .about-content {
+                grid-template-columns: 1fr;
+            }
+
+            h2 {
+                font-size: 2rem;
+            }
+
+            .headshot {
+                width: 220px;
+                height: 220px;
+            }
+
+            .contact-links {
+                gap: 1rem;
+            }
+
+            .contact-link {
+                padding: 0.8rem 1.5rem;
+                font-size: 0.9rem;
+            }
+
+            section {
+                padding: 3rem 0;
+            }
+
+            .expertise-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <header>
+        <nav>
+            <div class="logo">
+                <img src="Boston-University-Emblem.png" alt="Boston University" class="logo-img">
+            </div>
+            <ul>
+                <li><a href="Portfolio_1.html">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#expertise">Expertise</a></li>
+                <li><a href="#skills">Skills</a></li>
+                
+                <!-- Projects Dropdown -->
+                <li class="dropdown">
+                    <a href="projects.html">Projects</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="barracuda_engine.html">Barracuda Engine Rework</a></li>
+                        <li><a href="pin_installation.html">Pin Installation Improvement</a></li>
+                        <li><a href="poker_chips.html">Poker Chip Set</a></li>
+                        <li><a href="avionics_bay.html">Avionics Bay Manufacturing</a></li>
+                        <li><a href="anteater.html">Project Anteater</a></li>
+                        <li><a href="rocket_nozzle.html">Rocket Nozzle & Flight Computer</a></li>
+                    </ul>
+                </li>
+                
+                <!-- Experiences Dropdown -->
+                <li class="dropdown">
+                    <a href="experiences.html">Experience</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="experiences.html#pivot">Pivot Manufacturing</a></li>
+                        <li><a href="experiences.html#rocket-prop">Rocket Propulsion Group</a></li>
+                        <li><a href="experiences.html#shpe">SHPE Leadership</a></li>
+                    </ul>
+                </li>
+                
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>Rogelio Carbajal</h1>
+        <p>Mechanical Engineering | Aerospace Manufacturing Engineering | Structures Engineering</p>
+        <a href="projects.html" class="btn">View My Projects</a>
+    </section>
+
+    <!-- About Section -->
+    <section id="about">
+        <div class="container">
+            <h2 class="scroll-animate">About Me</h2>
+            <div class="about-content">
+                <div class="about-text scroll-animate fade-left">
+                    <h3>Mechanical Engineering w/ Concentration in Manufacturing Engineering @ Boston University</h3>
+                    <p>Specializations in CNC Programming and Quality inspection on parts made with rocketry and aerospace level precisions</p>
+                    <p>I look forward to applying my engineering knowledge and skills to building a better future</p>
+                    <p>When I'm not designing, I enjoy practicing my machining skills @ Boston University's Engineering Product Innovation Center</p>
+                </div>
+                <div class="headshot-container scroll-animate fade-right">
+                    <img src="headshot.jpg" alt="Rogelio Carbajal" class="headshot">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Expertise Section -->
+    <section id="expertise">
+        <div class="container">
+            <h2 class="scroll-animate">My Expertise</h2>
+            <div class="expertise-grid">
+                <div class="expertise-card scroll-animate">
+                    <h3>Design & Manufacturing</h3>
+                    <p>SOLIDWORKS, Fusion 360, CNC operations, precision machining, and advanced fixture design for aerospace-level components</p>
+                </div>
+                <div class="expertise-card scroll-animate">
+                    <h3>Quality & Metrology</h3>
+                    <p>GD&T, PC-DMIS, Rotary CMM, dimensional analysis, and quality inspection for high-precision rocketry and aerospace parts</p>
+                </div>
+                <div class="expertise-card scroll-animate">
+                    <h3>Problem Solving</h3>
+                    <p>Complex fixture design, aerospace manufacturing processes, CAM optimization, and innovative engineering solutions</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills">
+        <div class="container">
+            <h2 class="scroll-animate">Skills</h2>
+            <div class="skills-grid">
+                <div class="skill-card scroll-animate">
+                    <h3>CAD & Design</h3>
+                    <ul>
+                        <li>SOLIDWORKS</li>
+                        <li>Fusion 360</li>
+                        <li>Onshape</li>
+                        <li>Kicad Wiring Schematics</li>
+                    </ul>
+                </div>
+                <div class="skill-card scroll-animate">
+                    <h3>Manufacturing</h3>
+                    <ul>
+                        <li>CNC Mill</li>
+                        <li>CNC Lathe</li>
+                        <li>Fusion 360 CAM</li>
+                        <li>Waterjet</li>
+                        <li>Laser Cutter</li>
+                        <li>Laser Engraving</li>
+                        <li>Manual Milling</li>
+                        <li>Manual Lathe</li>
+                    </ul>
+                </div>
+                <div class="skill-card scroll-animate">
+                    <h3>Quality & Metrology</h3>
+                    <ul>
+                        <li>GD & T</li>
+                        <li>Rotary CMM</li>
+                        <li>PC-DMIS</li>
+                        <li>Metrology</li>
+                    </ul>
+                </div>
+                <div class="skill-card scroll-animate">
+                    <h3>Programming Languages</h3>
+                    <ul>
+                        <li>Python</li>
+                        <li>MATLAB</li>
+                        <li>C++</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact">
+        <div class="container">
+            <h2 class="scroll-animate">Contact Me</h2>
+            <div class="contact-content">
+                <p class="scroll-animate">I'm always interested in hearing about new projects and opportunities!</p>
+                <div class="contact-links">
+                    <a href="mailto:rogelioc@bu.edu" class="contact-link scroll-animate">
+                        ✉️ rogelioc@bu.edu
+                    </a>
+                    <a href="https://www.linkedin.com/in/carbajalr" target="_blank" rel="noopener noreferrer" class="contact-link scroll-animate">
+                        💼 LinkedIn
+                    </a>
+                    <a href="tel:+16027758997" class="contact-link scroll-animate">
+                        ☎️ 602-775-8997
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 Rogelio Carbajal. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Scroll Animation System
+        const animateOnScroll = () => {
+            const elements = document.querySelectorAll('.scroll-animate');
+            
+            elements.forEach(element => {
+                const elementTop = element.getBoundingClientRect().top;
+                const elementBottom = element.getBoundingClientRect().bottom;
+                const windowHeight = window.innerHeight;
+                
+                const progress = 1 - (elementTop / windowHeight);
+                
+                if (elementTop < windowHeight && elementBottom > 0) {
+                    if (element.classList.contains('fade-left')) {
+                        element.style.opacity = Math.min(progress * 1.5, 1);
+                        element.style.transform = `translateX(${Math.max(-40 * (1 - progress), -40)}px)`;
+                    } else if (element.classList.contains('fade-right')) {
+                        element.style.opacity = Math.min(progress * 1.5, 1);
+                        element.style.transform = `translateX(${Math.min(40 * (1 - progress), 40)}px)`;
+                    } else if (element.classList.contains('headshot-container')) {
+                        element.style.opacity = Math.min(progress * 1.5, 1);
+                        element.style.transform = `scale(${0.9 + progress * 0.1})`;
+                    } else {
+                        element.style.opacity = Math.min(progress * 1.5, 1);
+                        element.style.transform = `translateY(${Math.max(40 * (1 - progress), 0)}px)`;
+                    }
+                } else if (elementTop >= windowHeight) {
+                    element.style.opacity = 0;
+                    if (element.classList.contains('fade-left')) {
+                        element.style.transform = 'translateX(-40px)';
+                    } else if (element.classList.contains('fade-right')) {
+                        element.style.transform = 'translateX(40px)';
+                    } else if (element.classList.contains('headshot-container')) {
+                        element.style.transform = 'scale(0.9)';
+                    } else {
+                        element.style.transform = 'translateY(40px)';
+                    }
+                }
+            });
+        };
+
+        window.addEventListener('scroll', animateOnScroll);
+        window.addEventListener('load', animateOnScroll);
+    </script>
+</body>
+</html>
