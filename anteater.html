@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Anteater: Surface Cleaning Robot - Rogelio Carbajal</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: #333; }
+
+        header {
+            background: linear-gradient(135deg, #001f3f 0%, #003d7a 100%);
+            color: white;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo img { height: 50px; transition: transform 0.3s; }
+        .logo img:hover { transform: scale(1.05); }
+
+        nav ul { list-style: none; display: flex; gap: 2rem; }
+        nav a { color: white; text-decoration: none; transition: 0.3s; }
+        nav a:hover { opacity: 0.8; }
+
+        .dropdown { position: relative; }
+        .dropdown > a::after {
+            content: '';
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-right: 2px solid white;
+            border-bottom: 2px solid white;
+            transform: rotate(45deg) translateY(-3px);
+            margin-left: 6px;
+            transition: 0.3s;
+        }
+        .dropdown:hover > a::after { transform: rotate(-135deg) translateY(2px); }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: linear-gradient(135deg, #003d7a 0%, #001f3f 100%);
+            list-style: none;
+            padding: 0.8rem 0;
+            border-radius: 12px;
+            min-width: 280px;
+            margin-top: 0;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            pointer-events: none;
+        }
+
+        .dropdown:hover .dropdown-menu {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        .dropdown-menu a {
+            display: block;
+            padding: 0.9rem 1.5rem;
+            color: white;
+            border-left: 4px solid transparent;
+            transition: 0.3s;
+        }
+        .dropdown-menu a:hover {
+            background: rgba(255,255,255,0.1);
+            padding-left: 2rem;
+            border-left-color: #667eea;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 6rem 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            min-height: 70vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 31, 63, 0.5);
+            z-index: 1;
+        }
+
+        .hero-img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 0;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 1000px;
+        }
+
+        .hero h1 { font-size: 2.8rem; margin-bottom: 1rem; animation: slideDown 0.8s; }
+        .hero .project-meta { font-size: 1.1rem; opacity: 0.9; animation: slideUp 0.8s 0.2s both; }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .container { max-width: 1000px; margin: 0 auto; padding: 0 2rem; }
+        main { padding: 4rem 0; }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 2rem;
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .back-link:hover { color: #764ba2; }
+
+        .section {
+            margin-bottom: 2.5rem;
+            animation: fadeIn 0.8s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section h2 {
+            color: #001f3f;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-bottom: 1rem;
+        }
+
+        .section h2::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 2px;
+        }
+
+        .section h3 {
+            color: #003d7a;
+            font-size: 1.2rem;
+            margin-top: 1.5rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .section p {
+            line-height: 1.8;
+            color: #555;
+            margin-bottom: 1rem;
+        }
+
+        .section ul {
+            list-style: none;
+            margin-bottom: 1.5rem;
+            margin-left: 1rem;
+        }
+
+        .section li {
+            padding: 0.4rem 0 0.4rem 1.5rem;
+            position: relative;
+            color: #555;
+            line-height: 1.6;
+        }
+
+        .section li:before {
+            content: "▸";
+            color: #667eea;
+            position: absolute;
+            left: 0;
+        }
+
+        .video-section {
+            margin: 2rem 0;
+            text-align: center;
+            background: linear-gradient(135deg, #f0f4f8 0%, #e8f1ff 100%);
+            padding: 2rem;
+            border-radius: 8px;
+        }
+
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,31,63,0.15);
+        }
+
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            border-left: 4px solid #28a745;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+        }
+
+        .highlight-box h4 {
+            color: #155724;
+            margin-bottom: 1rem;
+            margin-top: 0;
+        }
+
+        .contribution-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin: 1.5rem 0;
+        }
+
+        .contribution-card {
+            background: linear-gradient(135deg, #f0f4f8 0%, #e8f1ff 100%);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .contribution-card h4 {
+            color: #001f3f;
+            margin-bottom: 0.8rem;
+            margin-top: 0;
+        }
+
+        .contribution-card p {
+            font-size: 0.95rem;
+            margin: 0;
+        }
+
+        footer {
+            background: #001f3f;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
+        }
+
+        @media (max-width: 768px) {
+            nav ul { gap: 1rem; font-size: 0.9rem; }
+            .hero { min-height: 50vh; }
+            .hero h1 { font-size: 2rem; }
+            .section h2 { font-size: 1.6rem; }
+            .contribution-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <a href="Portfolio_1.html" style="text-decoration: none; color: white; display: flex; align-items: center;">
+                    <img src="Boston-University-Emblem.png" alt="Boston University">
+                </a>
+            </div>
+            <ul>
+                <li><a href="Portfolio_1.html">Home</a></li>
+                <li><a href="Portfolio_1.html#about">About</a></li>
+                <li><a href="Portfolio_1.html#expertise">Expertise</a></li>
+                <li><a href="Portfolio_1.html#skills">Skills</a></li>
+                
+                <li class="dropdown">
+                    <a href="projects.html">Projects</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="barracuda_engine.html">Barracuda Engine Rework</a></li>
+                        <li><a href="pin_installation.html">Pin Installation Improvement</a></li>
+                        <li><a href="poker_chips.html">Poker Chip Set</a></li>
+                        <li><a href="avionics_bay.html">Avionics Bay Manufacturing</a></li>
+                        <li><a href="anteater.html">Project Anteater</a></li>
+                        <li><a href="rocket_nozzle.html">Rocket Nozzle & Flight Computer</a></li>
+                    </ul>
+                </li>
+                
+                <li class="dropdown">
+                    <a href="experiences.html">Experience</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="experiences.html#pivot">Pivot Manufacturing</a></li>
+                        <li><a href="experiences.html#rocket-prop">Rocket Propulsion Group</a></li>
+                        <li><a href="experiences.html#shpe">SHPE Leadership</a></li>
+                    </ul>
+                </li>
+                
+                <li><a href="Portfolio_1.html#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <img src="anteater.jpeg" alt="Project Anteater Robot" class="hero-img">
+        <div class="hero-content">
+            <h1>Project Anteater: Surface Cleaning Robot</h1>
+            <p class="project-meta">Autonomous Robot • Mechanical Design • Manufacturing</p>
+        </div>
+    </section>
+
+    <main>
+        <div class="container">
+            <a href="projects.html" class="back-link">← Back to Projects</a>
+
+            <section class="section">
+                <h2>Project Overview</h2>
+                <p>Project Anteater is an autonomous surface cleaning robot designed to navigate and clean a desk surface up to 4ft x 4ft. The robot features an internal power supply, microcontroller-driven operations, and an integrated cleaning system. My role was to lead the team in mechanical design and manufacturing of both the vacuum system and housing.</p>
+            </section>
+
+            <section class="section">
+                <h2>The Challenge</h2>
+                <p>Design and build an autonomous robot capable of:</p>
+                <ul>
+                    <li>Navigating a 4ft x 4ft desk surface autonomously</li>
+                    <li>Housing all power systems internally</li>
+                    <li>Operating via microcontroller for intelligent pathfinding</li>
+                    <li>Effectively cleaning surfaces with an integrated vacuum system</li>
+                </ul>
+            </section>
+
+            <section class="section">
+                <h2>My Contributions</h2>
+
+                <h3>Vacuum System Design & 3D Printing</h3>
+                <p>Due to the complex geometry required for efficient airflow, I selected 3D printing as the manufacturing method for the vacuum system. By printing in multiple sections, I was able to create:</p>
+                <ul>
+                    <li>Intricate funneling cones optimized for debris collection</li>
+                    <li>Honeycomb filter structures to prevent debris from entering the vacuum motor</li>
+                    <li>Multi-part assembly for print reliability and material efficiency</li>
+                </ul>
+
+                <h3>Housing Design & Laser Cutting</h3>
+                <p>I created the complete housing model in SOLIDWORKS, incorporating all electrical components for proper assembly and spacing. With the goal of laser-cutting acrylic sheets, I applied design-for-manufacturability (DFM) principles and exported all parts as DXF files for seamless production. The housing provides:</p>
+                <ul>
+                    <li>Structural integrity and protection for internal components</li>
+                    <li>Accessibility for maintenance and component access</li>
+                    <li>Clean, professional appearance</li>
+                    <li>Optimized layout for weight distribution and balance</li>
+                </ul>
+
+                <h3>Motor-to-Wheel Adapters</h3>
+                <p>I designed and machined motor-to-wheel adapters from 6061 aluminum to efficiently transmit motor rotation into translational movement across the desk. These adapters ensure:</p>
+                <ul>
+                    <li>Precise alignment between motor shaft and wheel</li>
+                    <li>Reliable torque transmission</li>
+                    <li>Smooth and responsive movement control</li>
+                </ul>
+            </section>
+
+            <section class="section">
+                <h2>Project Video</h2>
+                <div class="video-section">
+                    <div class="video-container">
+                        <iframe src="https://www.youtube.com/embed/Nh5CJjbugpg?t=40s" allowfullscreen="" loading="lazy"></iframe>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section">
+                <h2>Key Skills Demonstrated</h2>
+                <div class="contribution-grid">
+                    <div class="contribution-card">
+                        <h4>3D Printing & Design</h4>
+                        <p>Complex geometry optimization, multi-part printing strategy, filter design for airflow efficiency</p>
+                    </div>
+                    <div class="contribution-card">
+                        <h4>CAD & DFM</h4>
+                        <p>SOLIDWORKS modeling with component integration, design-for-manufacturability principles, DXF export for laser cutting</p>
+                    </div>
+                    <div class="contribution-card">
+                        <h4>CNC Machining</h4>
+                        <p>6061 aluminum part design, precision machining, motor adapter creation</p>
+                    </div>
+                    <div class="contribution-card">
+                        <h4>Team Leadership</h4>
+                        <p>Leading mechanical design decisions, coordinating with electrical and software teams, managing manufacturing timeline</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section">
+                <h2>Key Takeaways</h2>
+                <div class="highlight-box">
+                    <h4>Project Insights</h4>
+                    <ul>
+                        <li>3D printing enables complex geometries that traditional machining cannot easily achieve</li>
+                        <li>Design-for-manufacturability is critical when using multiple production methods</li>
+                        <li>Component integration in CAD ensures proper assembly and reduces on-site modifications</li>
+                        <li>Teamwork across disciplines (mechanical, electrical, software) is essential for successful robotics projects</li>
+                    </ul>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Rogelio Carbajal. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // No video autoplay needed - using iframe
+    </script>
+</body>
+</html>
